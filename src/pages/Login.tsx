@@ -54,6 +54,12 @@ const styles: { [key: string]: React.CSSProperties } = {
         width: '100%',
         maxWidth: '400px',
     },
+    title: {
+        marginBottom: '1.5rem',
+        fontSize: '1.5rem',
+        textAlign: 'center',
+        color: '#333',
+    },
     form: {
         display: 'flex',
         flexDirection: 'column',
@@ -62,7 +68,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     inputGroup: {
         display: 'flex',
         flexDirection: 'column',
-        textAlign: 'start',
     },
     label: {
         marginBottom: '0.5rem',

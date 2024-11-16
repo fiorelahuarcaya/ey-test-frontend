@@ -1,4 +1,9 @@
+import { useEffect } from 'react';
+
 const Providers = () => {
+    useEffect(() => {
+        document.title = 'Gestión de Proveedores'; 
+    }, []);
     return (
         <div>
             <h2>Listado de Proveedores</h2>
