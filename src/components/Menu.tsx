@@ -1,15 +1,16 @@
-import eyLogo from "../assets/EY.svg";
+import Logo from "./svg/Logo";
+
 
 const Menu = () => {
   return (
-    <div style={styles.menu}>
-      <div className="wrapper" style={styles.menu}>
+    <div className="flex flex-row w-full justify-center items-center bg-gray-50 py-4">
+      <div className="w-full wrapper flex flex-row items-center justify-between " >
         <a href="/">
-          <img src={eyLogo} className="logo" alt="EY logo" />
+          <Logo height="48"/>
         </a>
-        <nav>
-          <a href="/">Proveedores</a>
-          <a href="/login">Login</a>
+        <nav className="flex flex-row gap-6">
+          <a className="text-black hover:underline" href="/">Proveedores</a>
+          <a className="text-black hover:underline" href="/login">Login</a>
         </nav>
 
       </div>
@@ -18,15 +19,5 @@ const Menu = () => {
 };
 
 export default Menu;
-
-const styles: { [key: string]: React.CSSProperties } = {
-  menu: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-      backgroundColor: 'var(--background)',
-  }
-};
 
 

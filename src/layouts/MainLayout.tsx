@@ -8,7 +8,7 @@ const MainLayout = () => {
             <header>
                 <Menu />
             </header>
-            <main className='wrapper'>
+            <main className='w-full'>
                 <Outlet />
             </main>
             <footer>
