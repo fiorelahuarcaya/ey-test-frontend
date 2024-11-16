@@ -1,11 +1,18 @@
+import { useEffect } from 'react';
+
 const Login = () => {
+    useEffect(() => {
+        document.title = 'Login'; // Cambia el título de la pestaña del navegador
+    }, []);
+
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Iniciar Sesión</h2>
-                <form style={styles.form}>
-                    <div style={styles.inputGroup}>
-                        <label htmlFor="email" style={styles.label}>
+        <div className="flex justify-center items-center h-screen w-full bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
+                <form className="flex flex-col gap-4">
+                    {/* Grupo de Input: Correo Electrónico */}
+                    <div className="flex flex-col">
+                        <label htmlFor="email" className="mb-2 text-sm text-gray-600">
                             Correo Electrónico
                         </label>
                         <input
@@ -13,11 +20,13 @@ const Login = () => {
                             id="email"
                             name="email"
                             placeholder="Ingresa tu correo"
-                            style={styles.input}
+                            className="p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
-                    <div style={styles.inputGroup}>
-                        <label htmlFor="password" style={styles.label}>
+
+                    {/* Grupo de Input: Contraseña */}
+                    <div className="flex flex-col">
+                        <label htmlFor="password" className="mb-2 text-sm text-gray-600">
                             Contraseña
                         </label>
                         <input
@@ -25,10 +34,15 @@ const Login = () => {
                             id="password"
                             name="password"
                             placeholder="Ingresa tu contraseña"
-                            style={styles.input}
+                            className="p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
-                    <button type="button" style={styles.button}>
+
+                    {/* Botón */}
+                    <button
+                        type="button"
+                        className="p-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
+                    >
                         Iniciar Sesión
                     </button>
                 </form>
@@ -36,61 +50,5 @@ const Login = () => {
         </div>
     );
 };
-
-const styles: { [key: string]: React.CSSProperties } = {
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        width: '100%',
-        backgroundColor: '#f4f4f4',
-    },
-    card: {
-        backgroundColor: '#fff',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-        maxWidth: '400px',
-    },
-    title: {
-        marginBottom: '1.5rem',
-        fontSize: '1.5rem',
-        textAlign: 'center',
-        color: '#333',
-    },
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-    },
-    inputGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    label: {
-        marginBottom: '0.5rem',
-        fontSize: '0.9rem',
-        color: '#555',
-    },
-    input: {
-        padding: '0.75rem',
-        borderRadius: '4px',
-        border: '1px solid #ddd',
-        fontSize: '1rem',
-    },
-    button: {
-        padding: '0.75rem',
-        borderRadius: '4px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        fontSize: '1rem',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s',
-    },
-};
-
 
 export default Login;
