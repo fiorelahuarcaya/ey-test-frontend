@@ -1,10 +1,12 @@
 import React from "react";
+import AddCircle from "../svg/AddCircle";
 
-const TableOptions = () => {
-  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     onSearch(event.target.value); // Envía el valor de búsqueda al padre
-  // };
+type TableOptionsProps = {
+  // onSearch: (searchTerm: string) => void;
+  onAddProvider: () => void;
+};
 
+const TableOptions: React.FC<TableOptionsProps> = ({ onAddProvider }) => {
   return (
     <div className="flex justify-between items-center mb-4">
       {/* Campo de búsqueda */}
@@ -16,9 +18,10 @@ const TableOptions = () => {
       />
 
       <button
-        // onClick={onAddProvider}
-        className="px-4 py-2 bg-primary-800 text-white font-bold rounded-lg shadow-md hover:bg-primary-700 transition"
+        onClick={onAddProvider}
+        className=" flex flex-row gap-2  px-4 py-2 bg-primary-800 text-white font-bold rounded-lg shadow-md hover:bg-primary-700 transition"
       >
+        <AddCircle />
         Agregar Proveedor
       </button>
     </div>

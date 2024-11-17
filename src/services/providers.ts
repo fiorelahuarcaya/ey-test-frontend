@@ -31,3 +31,23 @@ export const getProviders = async (): Promise<Provider[]> => {
     },
   ];
 };
+
+export const createProvider = async (
+  newProvider: Provider,
+): Promise<Provider> => {
+  // Simula una solicitud POST al backend
+  const response = await fetch("https://api-tu-backend.com/proveedores", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newProvider),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al crear el proveedor");
+  }
+
+  const createdProvider = await response.json();
+  return createdProvider; // Retorna el proveedor creado
+};
