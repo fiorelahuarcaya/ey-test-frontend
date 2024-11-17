@@ -19,8 +19,24 @@ const Table: React.FC<TableProps> = ({
 }) => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
 
-  const toggleMenu = (id: number) => {
-    setActiveMenu(activeMenu === id ? null : id);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  const toggleMenu = (
+    id: number,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    if (activeMenu === id) {
+      setActiveMenu(null);
+      return;
+    }
+
+    const buttonRect = event.currentTarget.getBoundingClientRect();
+    setMenuPosition({
+      top: buttonRect.bottom,
+      left: buttonRect.right - 120, // Ajusta según el ancho del menú
+    });
+
+    setActiveMenu(id);
   };
 
   return (
@@ -45,7 +61,10 @@ const Table: React.FC<TableProps> = ({
         </thead>
         <tbody>
           {providers.map((provider) => (
-            <tr key={provider.id} className="border-t hover:bg-gray-100">
+            <tr
+              key={provider.proveedorId}
+              className="border-t hover:bg-gray-100"
+            >
               <td className="py-2 px-4 text-left">
                 {provider.identificacionTributaria}
               </td>
@@ -53,8 +72,12 @@ const Table: React.FC<TableProps> = ({
               <td className="py-2 px-4 text-left">
                 {provider.nombreComercial}
               </td>
-              <td className="py-2 px-4 text-left">{provider.telefono}</td>
-              <td className="py-2 px-4 text-left">{provider.correo}</td>
+              <td className="py-2 px-4 text-left">
+                {provider.numeroTelefonico}
+              </td>
+              <td className="py-2 px-4 text-left">
+                {provider.correoElectronico}
+              </td>
               <td className="py-2 px-4 text-left">
                 {provider.sitioWeb ? (
                   <a
@@ -69,7 +92,9 @@ const Table: React.FC<TableProps> = ({
                   "N/A"
                 )}
               </td>
-              <td className="py-2 px-4 text-left">{provider.direccion}</td>
+              <td className="py-2 px-4 text-left">
+                {provider.direccionFisica}
+              </td>
               <td className="py-2 px-4 text-left">{provider.pais}</td>
               <td className="py-2 px-4 text-left">
                 ${provider.facturacionAnual.toLocaleString()}
@@ -79,34 +104,53 @@ const Table: React.FC<TableProps> = ({
               </td>
               <td className="relative py-2 px-4 text-left">
                 <button
-                  onClick={() => toggleMenu(provider.id)}
+                  onClick={(event) => toggleMenu(provider.proveedorId, event)}
                   className="bg-none hover:bg-none"
                 >
                   {" "}
                   <Actions />
                 </button>
-                {activeMenu === provider.id && (
-                  <ul className="absolute right-0 mt-2 bg-white border rounded-md shadow-lg z-10">
+                {activeMenu === provider.proveedorId && (
+                  <ul
+                    className="absolute right-0 mt-2 max-w-60 bg-white border rounded-md shadow-lg z-10"
+                    style={{
+                      position: "fixed",
+                      top: `${menuPosition.top}px`,
+                      left: `${menuPosition.left}px`,
+                    }}
+                  >
                     <li
-                      onClick={() => onViewDetails(provider)}
+                      onClick={() => {
+                        onViewDetails(provider);
+                        setActiveMenu(null);
+                      }}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       Ver más detalle
                     </li>
                     <li
-                      onClick={() => onEdit(provider)}
+                      onClick={() => {
+                        onEdit(provider);
+                        setActiveMenu(null);
+                      }}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       Editar
                     </li>
                     <li
-                      onClick={() => onDelete(provider)}
+                      onClick={() => {
+                        onDelete(provider);
+                        setActiveMenu(null);
+                      }}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       Eliminar
                     </li>
                     <li
-                      onClick={() => onScreening(provider)}
+                      onClick={() => {
+                        onScreening(provider);
+                        setActiveMenu(null); // Cierra el submenú
+                      }}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       Screening

@@ -1,12 +1,12 @@
 export type Provider = {
-  id: number;
+  proveedorId: number;
   razonSocial: string;
   nombreComercial: string;
   identificacionTributaria: string;
-  telefono: string;
-  correo: string;
+  numeroTelefonico: string;
+  correoElectronico: string;
   sitioWeb?: string;
-  direccion: string;
+  direccionFisica: string;
   pais: string;
   facturacionAnual: number;
   fechaUltimaEdicion: string;

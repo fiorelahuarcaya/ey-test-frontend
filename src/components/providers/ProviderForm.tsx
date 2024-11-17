@@ -19,12 +19,12 @@ const validationSchema = Yup.object({
   identificacionTributaria: Yup.string()
     .length(11, "Debe tener 11 dígitos.")
     .required("Identificación tributaria es requerida."),
-  telefono: Yup.string().required("Teléfono es requerido."),
-  correo: Yup.string()
-    .email("Correo no válido.")
-    .required("Correo es requerido."),
+  numeroTelefonico: Yup.string().required("Teléfono es requerido."),
+  correoElectronico: Yup.string()
+    .email("correoElectronico no válido.")
+    .required("correoElectronico es requerido."),
   sitioWeb: Yup.string().matches(re, "Debe ser una URL válida."),
-  direccion: Yup.string().required("Dirección es requerida."),
+  direccionFisica: Yup.string().required("Dirección es requerida."),
   pais: Yup.string().required("Seleccione un país."),
   facturacionAnual: Yup.number()
     .positive("Debe ser un número positivo.")
@@ -41,10 +41,10 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
       razonSocial: "",
       nombreComercial: "",
       identificacionTributaria: "",
-      telefono: "",
-      correo: "",
+      numeroTelefonico: "",
+      correoElectronico: "",
       sitioWeb: "",
-      direccion: "",
+      direccionFisica: "",
       pais: "",
       facturacionAnual: 0,
       fechaUltimaEdicion: new Date().toISOString(), // Fecha actual
@@ -137,48 +137,56 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
 
       {/* Teléfono */}
       <div>
-        <label htmlFor="telefono" className="block text-sm font-medium">
+        <label htmlFor="numeroTelefonico" className="block text-sm font-medium">
           Teléfono
         </label>
         <input
-          id="telefono"
+          id="numeroTelefonico"
           type="tel"
-          name="telefono"
-          value={formik.values.telefono}
+          name="numeroTelefonico"
+          value={formik.values.numeroTelefonico}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className={`w-full px-3 py-2 border rounded-md ${
-            formik.touched.telefono && formik.errors.telefono
+            formik.touched.numeroTelefonico && formik.errors.numeroTelefonico
               ? "border-red-500"
               : ""
           }`}
         />
-        {formik.touched.telefono && formik.errors.telefono && (
-          <p className="text-red-500 text-sm">{formik.errors.telefono}</p>
+        {formik.touched.numeroTelefonico && formik.errors.numeroTelefonico && (
+          <p className="text-red-500 text-sm">
+            {formik.errors.numeroTelefonico}
+          </p>
         )}
       </div>
 
-      {/* Correo Electrónico */}
+      {/* correoElectronico Electrónico */}
       <div>
-        <label htmlFor="correo" className="block text-sm font-medium">
-          Correo Electrónico
+        <label
+          htmlFor="correoElectronico"
+          className="block text-sm font-medium"
+        >
+          correoElectronico Electrónico
         </label>
         <input
-          id="correo"
+          id="correoElectronico"
           type="email"
-          name="correo"
-          value={formik.values.correo}
+          name="correoElectronico"
+          value={formik.values.correoElectronico}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className={`w-full px-3 py-2 border rounded-md ${
-            formik.touched.correo && formik.errors.correo
+            formik.touched.correoElectronico && formik.errors.correoElectronico
               ? "border-red-500"
               : ""
           }`}
         />
-        {formik.touched.correo && formik.errors.correo && (
-          <p className="text-red-500 text-sm">{formik.errors.correo}</p>
-        )}
+        {formik.touched.correoElectronico &&
+          formik.errors.correoElectronico && (
+            <p className="text-red-500 text-sm">
+              {formik.errors.correoElectronico}
+            </p>
+          )}
       </div>
 
       {/* Sitio Web */}
@@ -206,24 +214,26 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
 
       {/* Dirección */}
       <div>
-        <label htmlFor="direccion" className="block text-sm font-medium">
+        <label htmlFor="direccionFisica" className="block text-sm font-medium">
           Dirección
         </label>
         <input
-          id="direccion"
+          id="direccionFisica"
           type="text"
-          name="direccion"
-          value={formik.values.direccion}
+          name="direccionFisica"
+          value={formik.values.direccionFisica}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className={`w-full px-3 py-2 border rounded-md ${
-            formik.touched.direccion && formik.errors.direccion
+            formik.touched.direccionFisica && formik.errors.direccionFisica
               ? "border-red-500"
               : ""
           }`}
         />
-        {formik.touched.direccion && formik.errors.direccion && (
-          <p className="text-red-500 text-sm">{formik.errors.direccion}</p>
+        {formik.touched.direccionFisica && formik.errors.direccionFisica && (
+          <p className="text-red-500 text-sm">
+            {formik.errors.direccionFisica}
+          </p>
         )}
       </div>
 

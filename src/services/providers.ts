@@ -1,35 +1,21 @@
+import api from "../utils/api";
 import { Provider } from "../utils/types";
+import { toast } from "react-toastify";
 
 export const getProviders = async (): Promise<Provider[]> => {
-  // Datos estáticos por ahora
-  return [
-    {
-      id: 1,
-      razonSocial: "Proveedor Uno S.A.",
-      nombreComercial: "ProvUno",
-      identificacionTributaria: "12345678901",
-      telefono: "987654321",
-      correo: "contacto@provuno.com",
-      sitioWeb: "https://provuno.com",
-      direccion: "Calle Falsa 123",
-      pais: "Perú",
-      facturacionAnual: 1000000,
-      fechaUltimaEdicion: "2024-11-16T12:00:00Z",
-    },
-    {
-      id: 2,
-      razonSocial: "Proveedor Dos S.A.",
-      nombreComercial: "ProvDos",
-      identificacionTributaria: "10987654321",
-      telefono: "912345678",
-      correo: "info@provdos.com",
-      sitioWeb: "https://provdos.com",
-      direccion: "Av. Principal 456",
-      pais: "Chile",
-      facturacionAnual: 2000000,
-      fechaUltimaEdicion: "2024-10-15T15:30:00Z",
-    },
-  ];
+  try {
+    const response = await api.get("/api/proveedor");
+    if (response.data.status !== "success") {
+      toast.error(`Error: ${response.data.message}`);
+      return [];
+    }
+    toast.success("Proveedores listados correctamente.");
+    return response.data.data as Provider[];
+  } catch (error) {
+    console.error("Error al obtener proveedores:", error);
+    toast.error("No se pudo obtener la lista de proveedores.");
+    return [];
+  }
 };
 
 export const createProvider = async (
@@ -57,12 +43,29 @@ export const getProviderById = async (id: number): Promise<Provider> => {
   return response.json();
 };
 
-export const deleteProvider = async (id: number): Promise<void> => {
-  await fetch(`https://api-tu-backend.com/proveedores/${id}`, {
-    method: "DELETE",
-  });
-};
+export const deleteProvider = async (id: number): Promise<string> => {
+  try {
+    const response = await api.delete(`/api/proveedor/${id}`);
 
+    if (response.data.status === "success") {
+      toast.success(
+        response.data.message || "Proveedor eliminado correctamente.",
+      );
+    } else {
+      toast.error(response.data.message || "No se pudo eliminar el proveedor.");
+    }
+
+    return response.data.status;
+  } catch (error: any) {
+    console.error(`Error al eliminar proveedor con ID ${id}:`, error);
+    const errorMessage =
+      error.response?.data?.message ||
+      "Ocurrió un error al intentar eliminar el proveedor.";
+    toast.error(errorMessage);
+
+    return "error";
+  }
+};
 export const fetchScreeningData = async (id: number): Promise<any[]> => {
   const response = await fetch(`https://api-tu-backend.com/screening/${id}`);
   return response.json();

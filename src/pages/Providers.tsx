@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 
 import {
-  createProvider,
   getProviders,
   getProviderById,
   deleteProvider,
@@ -14,6 +13,7 @@ import Table from "../components/providers/Table";
 import TableOptions from "../components/providers/TableOptions";
 import Modal from "../components/Modal";
 import ProviderForm from "../components/providers/ProviderForm";
+import ConfirmationModal from "../components/providers/ConfirmationModal";
 
 const Providers = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -25,6 +25,7 @@ const Providers = () => {
 
     const fetchProviders = async () => {
       const data = await getProviders();
+
       setProviders(data);
     };
 
@@ -57,14 +58,14 @@ const Providers = () => {
 
   // Editar proveedor
   const handleEdit = async (provider: Provider) => {
-    const data = await getProviderById(provider.id);
+    const data = await getProviderById(provider.proveedorId);
     openModal(
       <ProviderForm
         initialValues={data}
         onSubmit={(updatedProvider) => {
           setProviders((prev) =>
             prev.map((p) =>
-              p.id === updatedProvider.id ? updatedProvider : p,
+              p.proveedorId === updatedProvider.id ? updatedProvider : p,
             ),
           );
           closeModal();
@@ -77,40 +78,29 @@ const Providers = () => {
   // Eliminar proveedor
   const handleDelete = (provider: Provider) => {
     openModal(
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-red-500">
-          Eliminar Proveedor
-        </h2>
-        <p>
-          ¿Estás seguro de querer eliminar al proveedor{" "}
-          <strong>{provider.nombreComercial}</strong> con identificación{" "}
-          <strong>{provider.identificacionTributaria}</strong>?
-        </p>
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={closeModal}
-            className="px-4 py-2 bg-gray-300 rounded-md mr-2"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={async () => {
-              await deleteProvider(provider.id);
-              setProviders((prev) => prev.filter((p) => p.id !== provider.id));
-              closeModal();
-            }}
-            className="px-4 py-2 bg-red-500 text-white rounded-md"
-          >
-            Eliminar
-          </button>
-        </div>
-      </div>,
+      <ConfirmationModal
+        title="Eliminar Proveedor"
+        nombreComercial={provider.nombreComercial}
+        identificacionTributaria={provider.identificacionTributaria}
+        onConfirm={async () => {
+          const statusDelete = await deleteProvider(provider.proveedorId);
+          if (statusDelete === "success") {
+            setProviders((prev) =>
+              prev.filter((p) => p.proveedorId !== provider.proveedorId),
+            );
+          }
+          closeModal();
+        }}
+        onCancel={closeModal}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+      />,
     );
   };
 
   // Ver más detalles
   const handleViewDetails = async (provider: Provider) => {
-    const data = await getProviderById(provider.id);
+    const data = await getProviderById(provider.proveedorId);
     openModal(
       <div>
         <h2 className="text-2xl font-bold mb-4">Detalles del Proveedor</h2>
@@ -121,10 +111,10 @@ const Providers = () => {
           <strong>Nombre Comercial:</strong> {data.nombreComercial}
         </p>
         <p>
-          <strong>Teléfono:</strong> {data.telefono}
+          <strong>Teléfono:</strong> {data.numeroTelefonico}
         </p>
         <p>
-          <strong>Correo:</strong> {data.correo}
+          <strong>Correo:</strong> {data.correoElectronico}
         </p>
         <p>
           <strong>Sitio Web:</strong>{" "}
@@ -133,7 +123,7 @@ const Providers = () => {
           </a>
         </p>
         <p>
-          <strong>Dirección:</strong> {data.direccion}
+          <strong>Dirección:</strong> {data.direccionFisica}
         </p>
         <p>
           <strong>País:</strong> {data.pais}
@@ -152,7 +142,7 @@ const Providers = () => {
 
   // Screening
   const handleScreening = async (provider: Provider) => {
-    const screeningData = await fetchScreeningData(provider.id);
+    const screeningData = await fetchScreeningData(provider.proveedorId);
     openModal(
       <div>
         <h2 className="text-2xl font-bold mb-4">
