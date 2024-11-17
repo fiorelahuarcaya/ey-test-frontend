@@ -51,3 +51,19 @@ export const createProvider = async (
   const createdProvider = await response.json();
   return createdProvider; // Retorna el proveedor creado
 };
+
+export const getProviderById = async (id: number): Promise<Provider> => {
+  const response = await fetch(`https://api-tu-backend.com/proveedores/${id}`);
+  return response.json();
+};
+
+export const deleteProvider = async (id: number): Promise<void> => {
+  await fetch(`https://api-tu-backend.com/proveedores/${id}`, {
+    method: "DELETE",
+  });
+};
+
+export const fetchScreeningData = async (id: number): Promise<any[]> => {
+  const response = await fetch(`https://api-tu-backend.com/screening/${id}`);
+  return response.json();
+};

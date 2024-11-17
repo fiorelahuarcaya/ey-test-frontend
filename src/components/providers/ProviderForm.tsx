@@ -1,13 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Provider } from "../../utils/types";
 
-type AddProviderFormProps = {
+type ProviderFormProps = {
+  initialValues?: Provider;
   onClose: () => void; // Función para cerrar el modal
   onSubmit: (formData: any) => void; // Callback para manejar el envío
 };
 
-const re = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
+const re =
+  /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object({
@@ -20,7 +23,7 @@ const validationSchema = Yup.object({
   correo: Yup.string()
     .email("Correo no válido.")
     .required("Correo es requerido."),
-  sitioWeb: Yup.string().matches(re,'Debe ser una URL válida.'),
+  sitioWeb: Yup.string().matches(re, "Debe ser una URL válida."),
   direccion: Yup.string().required("Dirección es requerida."),
   pais: Yup.string().required("Seleccione un país."),
   facturacionAnual: Yup.number()
@@ -28,12 +31,13 @@ const validationSchema = Yup.object({
     .required("Facturación anual es requerida."),
 });
 
-const AddProviderForm: React.FC<AddProviderFormProps> = ({
+const ProviderForm: React.FC<ProviderFormProps> = ({
+  initialValues,
   onClose,
   onSubmit,
 }) => {
   const formik = useFormik({
-    initialValues: {
+    initialValues: initialValues || {
       razonSocial: "",
       nombreComercial: "",
       identificacionTributaria: "",
@@ -42,13 +46,12 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
       sitioWeb: "",
       direccion: "",
       pais: "",
-      facturacionAnual: "",
+      facturacionAnual: 0,
       fechaUltimaEdicion: new Date().toISOString(), // Fecha actual
     },
     validationSchema,
     onSubmit: (values) => {
       onSubmit(values); // Callback al enviar el formulario
-      onClose(); // Cierra el modal
     },
   });
 
@@ -290,4 +293,4 @@ const AddProviderForm: React.FC<AddProviderFormProps> = ({
   );
 };
 
-export default AddProviderForm;
+export default ProviderForm;
