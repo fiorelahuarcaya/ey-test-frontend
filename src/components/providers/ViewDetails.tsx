@@ -1,5 +1,4 @@
 import React from "react";
-import AddCircle from "../svg/AddCircle";
 import { Provider } from "../../utils/types";
 
 type ViewDetailsProps = {
