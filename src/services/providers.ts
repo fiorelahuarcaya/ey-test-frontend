@@ -1,10 +1,10 @@
-import api from "../utils/api";
+import apiToken from "../utils/apiToken";
 import { Provider } from "../utils/types";
 import { toast } from "react-toastify";
 
 export const getProviders = async (): Promise<Provider[]> => {
   try {
-    const response = await api.get("/api/proveedor");
+    const response = await apiToken.get("/api/proveedor");
     if (response.data.status !== "success") {
       toast.error(`Error: ${response.data.message}`);
       return [];
@@ -22,19 +22,21 @@ export const createProvider = async (
   newProvider: Provider,
 ): Promise<Provider | null> => {
   try {
-    const response = await api.post("/api/proveedor", newProvider);
+    const response = await apiToken.post("/api/proveedor", newProvider);
 
     if (response.data.status === "success") {
       toast.success(response.data.message || "Proveedor creado correctamente.");
       return response.data.data;
     } else {
-      toast.error(response.data.message || "No se pudo crear el proveedor.");
+      toast.error(
+        response.data.error.details || "No se pudo crear el proveedor.",
+      );
       return null;
     }
   } catch (error: any) {
     console.error("Error al crear proveedor:", error);
     const errorMessage =
-      error.response?.data?.message ||
+      error.response?.data?.error.details ||
       "Ocurrió un error al intentar crear el proveedor.";
     toast.error(errorMessage);
     return null;
@@ -45,7 +47,7 @@ export const updateProvider = async (
   updatedProvider: Provider,
 ): Promise<Provider | null> => {
   try {
-    const response = await api.put(`/api/proveedor`, updatedProvider);
+    const response = await apiToken.put(`/api/proveedor`, updatedProvider);
 
     if (response.data.status === "success") {
       toast.success(
@@ -70,12 +72,9 @@ export const updateProvider = async (
 
 export const getProviderById = async (id: number): Promise<Provider | null> => {
   try {
-    const response = await api.get(`/api/proveedor/${id}`);
+    const response = await apiToken.get(`/api/proveedor/${id}`);
 
     if (response.data.status === "success") {
-      toast.success(
-        response.data.message || "Proveedor obtenido correctamente.",
-      );
       return response.data.data;
     } else {
       toast.error(response.data.message || "No se pudo obtener el proveedor.");
@@ -93,7 +92,7 @@ export const getProviderById = async (id: number): Promise<Provider | null> => {
 
 export const deleteProvider = async (id: number): Promise<string> => {
   try {
-    const response = await api.delete(`/api/proveedor/${id}`);
+    const response = await apiToken.delete(`/api/proveedor/${id}`);
 
     if (response.data.status === "success") {
       toast.success(

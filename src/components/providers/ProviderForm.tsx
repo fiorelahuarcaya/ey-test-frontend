@@ -26,7 +26,9 @@ const validationSchema = Yup.object({
   correoElectronico: Yup.string()
     .email("Correo electrónico no válido.")
     .required("Correo electrónico es requerido."),
-  sitioWeb: Yup.string().matches(re, "Debe ser una URL válida."),
+  sitioWeb: Yup.string()
+    .matches(re, "Debe ser una URL válida.")
+    .required("Sitio web es requerido."),
   direccionFisica: Yup.string().required("Dirección es requerida."),
   pais: Yup.string().required("Seleccione un país."),
   facturacionAnual: Yup.number()

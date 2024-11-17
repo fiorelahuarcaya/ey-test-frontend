@@ -49,7 +49,14 @@ const Providers = () => {
       <ProviderForm
         onSubmit={(newProvider) => {
           if (newProvider) {
-            setProviders((prev) => [...prev, newProvider]);
+            setProviders((prev) => {
+              const updatedProviders = [newProvider, ...prev];
+              return updatedProviders.sort(
+                (a, b) =>
+                  new Date(b.fechaUltimaEdicion).getTime() -
+                  new Date(a.fechaUltimaEdicion).getTime(),
+              );
+            });
           } else {
             console.error("No se pudo crear el proveedor.");
           }

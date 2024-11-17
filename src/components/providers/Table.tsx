@@ -44,7 +44,7 @@ const Table: React.FC<TableProps> = ({
       <table className="w-full bg-white">
         <thead className="bg-primary-200">
           <tr>
-            <th className="min-w-52 py-2 px-4 text-left">
+            <th className="min-w-28 py-2 px-4 text-left">
               Identificación Tributaria
             </th>
             <th className="min-w-52 py-2 px-4 text-left">Razón Social</th>
