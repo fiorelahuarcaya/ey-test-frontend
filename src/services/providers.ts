@@ -20,27 +20,75 @@ export const getProviders = async (): Promise<Provider[]> => {
 
 export const createProvider = async (
   newProvider: Provider,
-): Promise<Provider> => {
-  // Simula una solicitud POST al backend
-  const response = await fetch("https://api-tu-backend.com/proveedores", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newProvider),
-  });
+): Promise<Provider | null> => {
+  try {
+    const response = await api.post("/api/proveedor", newProvider);
 
-  if (!response.ok) {
-    throw new Error("Error al crear el proveedor");
+    if (response.data.status === "success") {
+      toast.success(response.data.message || "Proveedor creado correctamente.");
+      return response.data.data;
+    } else {
+      toast.error(response.data.message || "No se pudo crear el proveedor.");
+      return null;
+    }
+  } catch (error: any) {
+    console.error("Error al crear proveedor:", error);
+    const errorMessage =
+      error.response?.data?.message ||
+      "Ocurrió un error al intentar crear el proveedor.";
+    toast.error(errorMessage);
+    return null;
   }
-
-  const createdProvider = await response.json();
-  return createdProvider; // Retorna el proveedor creado
 };
 
-export const getProviderById = async (id: number): Promise<Provider> => {
-  const response = await fetch(`https://api-tu-backend.com/proveedores/${id}`);
-  return response.json();
+export const updateProvider = async (
+  updatedProvider: Provider,
+): Promise<Provider | null> => {
+  try {
+    const response = await api.put(`/api/proveedor`, updatedProvider);
+
+    if (response.data.status === "success") {
+      toast.success(
+        response.data.message || "Proveedor modificado correctamente.",
+      );
+      return response.data.data;
+    } else {
+      toast.error(
+        response.data.message || "No se pudo modificar el proveedor.",
+      );
+      return null;
+    }
+  } catch (error: any) {
+    console.error("Error al actualizar proveedor:", error);
+    const errorMessage =
+      error.response?.data?.message ||
+      "Ocurrió un error al intentar modificar el proveedor.";
+    toast.error(errorMessage);
+    return null;
+  }
+};
+
+export const getProviderById = async (id: number): Promise<Provider | null> => {
+  try {
+    const response = await api.get(`/api/proveedor/${id}`);
+
+    if (response.data.status === "success") {
+      toast.success(
+        response.data.message || "Proveedor obtenido correctamente.",
+      );
+      return response.data.data;
+    } else {
+      toast.error(response.data.message || "No se pudo obtener el proveedor.");
+      return null;
+    }
+  } catch (error: any) {
+    console.error(`Error al obtener proveedor con ID ${id}:`, error);
+    const errorMessage =
+      error.response?.data?.message ||
+      "Ocurrió un error al intentar obtener el proveedor.";
+    toast.error(errorMessage);
+    return null;
+  }
 };
 
 export const deleteProvider = async (id: number): Promise<string> => {
@@ -66,6 +114,7 @@ export const deleteProvider = async (id: number): Promise<string> => {
     return "error";
   }
 };
+
 export const fetchScreeningData = async (id: number): Promise<any[]> => {
   const response = await fetch(`https://api-tu-backend.com/screening/${id}`);
   return response.json();

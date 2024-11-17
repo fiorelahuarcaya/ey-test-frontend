@@ -14,6 +14,7 @@ import TableOptions from "../components/providers/TableOptions";
 import Modal from "../components/Modal";
 import ProviderForm from "../components/providers/ProviderForm";
 import ConfirmationModal from "../components/providers/ConfirmationModal";
+import ViewDetails from "../components/providers/ViewDetails";
 
 const Providers = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -43,12 +44,15 @@ const Providers = () => {
     setModalContent(null);
   };
 
-  // Crear proveedor
   const handleCreate = () => {
     openModal(
       <ProviderForm
         onSubmit={(newProvider) => {
-          setProviders((prev) => [...prev, newProvider]);
+          if (newProvider) {
+            setProviders((prev) => [...prev, newProvider]);
+          } else {
+            console.error("No se pudo crear el proveedor.");
+          }
           closeModal();
         }}
         onClose={closeModal}
@@ -56,18 +60,26 @@ const Providers = () => {
     );
   };
 
-  // Editar proveedor
-  const handleEdit = async (provider: Provider) => {
-    const data = await getProviderById(provider.proveedorId);
+  const handleEdit = (provider: Provider) => {
     openModal(
       <ProviderForm
-        initialValues={data}
+        initialValues={provider}
         onSubmit={(updatedProvider) => {
-          setProviders((prev) =>
-            prev.map((p) =>
-              p.proveedorId === updatedProvider.id ? updatedProvider : p,
-            ),
-          );
+          setProviders((prev) => {
+            // Reemplaza el proveedor actualizado y ordena por fechaUltimaEdicion descendente
+            const updatedProviders = prev
+              .map((p) =>
+                p.proveedorId === updatedProvider.proveedorId
+                  ? updatedProvider
+                  : p,
+              )
+              .sort(
+                (a, b) =>
+                  new Date(b.fechaUltimaEdicion).getTime() -
+                  new Date(a.fechaUltimaEdicion).getTime(),
+              );
+            return updatedProviders;
+          });
           closeModal();
         }}
         onClose={closeModal}
@@ -99,45 +111,11 @@ const Providers = () => {
   };
 
   // Ver más detalles
-  const handleViewDetails = async (provider: Provider) => {
-    const data = await getProviderById(provider.proveedorId);
-    openModal(
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Detalles del Proveedor</h2>
-        <p>
-          <strong>Razón Social:</strong> {data.razonSocial}
-        </p>
-        <p>
-          <strong>Nombre Comercial:</strong> {data.nombreComercial}
-        </p>
-        <p>
-          <strong>Teléfono:</strong> {data.numeroTelefonico}
-        </p>
-        <p>
-          <strong>Correo:</strong> {data.correoElectronico}
-        </p>
-        <p>
-          <strong>Sitio Web:</strong>{" "}
-          <a href={data.sitioWeb} target="_blank" rel="noopener noreferrer">
-            {data.sitioWeb}
-          </a>
-        </p>
-        <p>
-          <strong>Dirección:</strong> {data.direccionFisica}
-        </p>
-        <p>
-          <strong>País:</strong> {data.pais}
-        </p>
-        <p>
-          <strong>Facturación Anual:</strong> $
-          {data.facturacionAnual.toLocaleString()}
-        </p>
-        <p>
-          <strong>Última Edición:</strong>{" "}
-          {new Date(data.fechaUltimaEdicion).toLocaleString()}
-        </p>
-      </div>,
-    );
+  const handleViewDetails = async (providerId: number) => {
+    const provider = await getProviderById(providerId);
+    if (provider) {
+      openModal(<ViewDetails provider={provider} />);
+    }
   };
 
   // Screening
@@ -187,7 +165,7 @@ const Providers = () => {
           />
 
           {isModalOpen && (
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <Modal height={600} isOpen={isModalOpen} onClose={closeModal}>
               {modalContent}
             </Modal>
           )}

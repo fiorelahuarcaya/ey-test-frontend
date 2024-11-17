@@ -1,7 +1,7 @@
 import AppRoutes from "./routes/AppRoutes";
 import { ToastContainer } from "react-toastify"; // Importa el ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Importa los estilos de Toastify
-import "./styles/base.css"; // Tus estilos personalizados
+import "react-toastify/dist/ReactToastify.css";
+import "./styles/base.css";
 
 const App = () => {
   return (

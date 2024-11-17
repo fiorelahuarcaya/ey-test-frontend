@@ -7,7 +7,7 @@ type TableProps = {
   onEdit: (provider: Provider) => void;
   onDelete: (provider: Provider) => void;
   onScreening: (provider: Provider) => void;
-  onViewDetails: (provider: Provider) => void;
+  onViewDetails: (providerId: number) => void;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -49,12 +49,12 @@ const Table: React.FC<TableProps> = ({
             </th>
             <th className="min-w-52 py-2 px-4 text-left">Razón Social</th>
             <th className="min-w-52 py-2 px-4 text-left">Nombre Comercial</th>
-            <th className="min-w-40 py-2 px-4 text-left">Teléfono</th>
+            {/* <th className="min-w-40 py-2 px-4 text-left">Teléfono</th>
             <th className="min-w-52 py-2 px-4 text-left">Correo</th>
             <th className="min-w-52 py-2 px-4 text-left">Sitio Web</th>
-            <th className="min-w-52 py-2 px-4 text-left">Dirección</th>
+            <th className="min-w-52 py-2 px-4 text-left">Dirección</th> */}
             <th className="min-w-40 py-2 px-4 text-left">País</th>
-            <th className="min-w-52 py-2 px-4 text-left">Facturación Anual</th>
+            {/* <th className="min-w-52 py-2 px-4 text-left">Facturación Anual</th> */}
             <th className="min-w-52 py-2 px-4 text-left">Última Edición</th>
             <th className="py-2 px-4 text-left"></th>
           </tr>
@@ -72,7 +72,7 @@ const Table: React.FC<TableProps> = ({
               <td className="py-2 px-4 text-left">
                 {provider.nombreComercial}
               </td>
-              <td className="py-2 px-4 text-left">
+              {/* <td className="py-2 px-4 text-left">
                 {provider.numeroTelefonico}
               </td>
               <td className="py-2 px-4 text-left">
@@ -94,11 +94,11 @@ const Table: React.FC<TableProps> = ({
               </td>
               <td className="py-2 px-4 text-left">
                 {provider.direccionFisica}
-              </td>
+              </td> */}
               <td className="py-2 px-4 text-left">{provider.pais}</td>
-              <td className="py-2 px-4 text-left">
+              {/* <td className="py-2 px-4 text-left">
                 ${provider.facturacionAnual.toLocaleString()}
-              </td>
+              </td> */}
               <td className="py-2 px-4 text-left">
                 {provider.fechaUltimaEdicion}
               </td>
@@ -121,7 +121,7 @@ const Table: React.FC<TableProps> = ({
                   >
                     <li
                       onClick={() => {
-                        onViewDetails(provider);
+                        onViewDetails(provider.proveedorId);
                         setActiveMenu(null);
                       }}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
