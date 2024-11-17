@@ -6,7 +6,6 @@ import {
   getProviders,
   getProviderById,
   deleteProvider,
-  fetchScreeningData,
 } from "../services/providers";
 import { Provider } from "../utils/types";
 import Table from "../components/providers/Table";
@@ -15,6 +14,11 @@ import Modal from "../components/Modal";
 import ProviderForm from "../components/providers/ProviderForm";
 import ConfirmationModal from "../components/providers/ConfirmationModal";
 import ViewDetails from "../components/providers/ViewDetails";
+import {
+  fetchOfacSanctions,
+  fetchWorldBankScreening,
+} from "../services/screening";
+import Screening from "../components/providers/Screening";
 
 const Providers = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -125,31 +129,12 @@ const Providers = () => {
     }
   };
 
-  // Screening
   const handleScreening = async (provider: Provider) => {
-    const screeningData = await fetchScreeningData(provider.proveedorId);
+    const ofacSanctions = await fetchOfacSanctions(provider.razonSocial);
+    const offWorldBank = await fetchWorldBankScreening(provider.razonSocial);
+
     openModal(
-      <div>
-        <h2 className="text-2xl font-bold mb-4">
-          Screening de {provider.nombreComercial}
-        </h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th>Fuente</th>
-              <th>Resultado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {screeningData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.source}</td>
-                <td>{item.result}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>,
+      <Screening ofacSanctions={ofacSanctions} offWorldBank={offWorldBank} />,
     );
   };
 
@@ -172,7 +157,12 @@ const Providers = () => {
           />
 
           {isModalOpen && (
-            <Modal height={600} isOpen={isModalOpen} onClose={closeModal}>
+            <Modal
+              height={600}
+              width={1000}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+            >
               {modalContent}
             </Modal>
           )}

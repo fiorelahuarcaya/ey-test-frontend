@@ -113,8 +113,3 @@ export const deleteProvider = async (id: number): Promise<string> => {
     return "error";
   }
 };
-
-export const fetchScreeningData = async (id: number): Promise<any[]> => {
-  const response = await fetch(`https://api-tu-backend.com/screening/${id}`);
-  return response.json();
-};
